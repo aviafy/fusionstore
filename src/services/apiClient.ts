@@ -52,6 +52,18 @@ async function parseJsonSafe(res: Response): Promise<unknown> {
   }
 }
 
+function isUnexpectedTextResponse(body: unknown) {
+  return typeof body === 'string' && body.trim().length > 0;
+}
+
+function describeUnexpectedResponse(res: Response, body: string) {
+  const contentType = res.headers.get('content-type')?.toLowerCase() ?? '';
+  if (contentType.includes('text/html') || /^\s*</.test(body)) {
+    return 'HTML';
+  }
+  return contentType || 'text';
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit & { token?: string | null } = {},
@@ -66,7 +78,9 @@ export async function apiFetch<T>(
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const res = await fetch(`${API_BASE}${path}`, {
+  const requestUrl = `${API_BASE}${path}`;
+
+  const res = await fetch(requestUrl, {
     ...init,
     headers,
     credentials: 'include',
@@ -80,6 +94,17 @@ export async function apiFetch<T>(
       (body && typeof body === 'object' && 'error' in body && String((body as { error?: string }).error)) ||
       res.statusText;
     throw new ApiError(msg || 'Request failed', res.status, body);
+  }
+
+  if (isUnexpectedTextResponse(body)) {
+    throw new ApiError(
+      `Expected JSON from ${requestUrl} but received ${describeUnexpectedResponse(
+        res,
+        body,
+      )}. Check VITE_API_BASE_URL and Vercel /api routing.`,
+      res.status,
+      body,
+    );
   }
 
   return body as T;
