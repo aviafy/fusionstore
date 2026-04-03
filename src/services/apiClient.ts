@@ -10,8 +10,26 @@ import type {
 } from './types';
 
 const rawApiBase = import.meta.env.VITE_API_BASE_URL?.trim();
-const API_BASE =
-  rawApiBase && /^https?:\/\//i.test(rawApiBase) ? rawApiBase.replace(/\/$/, '') : '/api';
+
+function normalizeApiBase(rawBase: string | undefined) {
+  if (!rawBase) return '/api';
+  if (!/^https?:\/\//i.test(rawBase)) {
+    return rawBase.replace(/\/$/, '') || '/api';
+  }
+
+  try {
+    const url = new URL(rawBase);
+    const pathname = url.pathname.replace(/\/+$/, '');
+    if (!pathname) {
+      url.pathname = '/api';
+    }
+    return url.toString().replace(/\/$/, '');
+  } catch {
+    return rawBase.replace(/\/$/, '');
+  }
+}
+
+const API_BASE = normalizeApiBase(rawApiBase);
 
 export class ApiError extends Error {
   status: number;
