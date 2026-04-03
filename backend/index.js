@@ -37,6 +37,33 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173,http:
   .map(s => s.trim())
   .filter(Boolean);
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function normalizeOrigin(origin) {
+  return String(origin || '').trim().replace(/\/$/, '');
+}
+
+function compileOriginPattern(origin) {
+  const normalized = normalizeOrigin(origin);
+  if (!normalized) return null;
+  if (!normalized.includes('*')) return normalized;
+  return new RegExp(`^${escapeRegex(normalized).replace(/\\\*/g, '.*')}$`);
+}
+
+const allowedOriginPatterns = clientOrigins.map(compileOriginPattern).filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  const normalized = normalizeOrigin(origin);
+  if (!normalized) return true;
+  if (allowedOriginPatterns.length === 0) return true;
+
+  return allowedOriginPatterns.some(pattern =>
+    typeof pattern === 'string' ? pattern === normalized : pattern.test(normalized)
+  );
+}
+
 app.set('trust proxy', 1);
 
 app.use(
@@ -48,7 +75,12 @@ app.use(
 
 app.use(
   cors({
-    origin: clientOrigins.length ? clientOrigins : true,
+    origin(origin, callback) {
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
