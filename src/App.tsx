@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -41,59 +42,61 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/nft" element={<NFTGallery />} />
-            <Route path="/nft/:id" element={<NFTDetails />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/service/:id" element={<ServiceDetails />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/order-tracking" element={<OrderTracking />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/shipping-returns" element={<ShippingReturns />} />
-            <Route path="/metamask" element={<MetaMask />} />
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contact-freelancer/:id"
-              element={
-                <ProtectedRoute>
-                  <ContactFreelancer />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contact-history"
-              element={
-                <ProtectedRoute>
-                  <ContactHistory />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/nft" element={<NFTGallery />} />
+              <Route path="/nft/:id" element={<NFTDetails />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/service/:id" element={<ServiceDetails />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/order-tracking" element={<OrderTracking />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/shipping-returns" element={<ShippingReturns />} />
+              <Route path="/metamask" element={<MetaMask />} />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contact-freelancer/:id"
+                element={
+                  <ProtectedRoute>
+                    <ContactFreelancer />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contact-history"
+                element={
+                  <ProtectedRoute>
+                    <ContactHistory />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
