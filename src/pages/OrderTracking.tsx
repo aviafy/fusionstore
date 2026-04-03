@@ -8,6 +8,7 @@ import { useTrackOrderMutation } from "@/hooks/useOrders";
 import { ApiError } from "@/services/apiClient";
 import type { OrderTrackResponse } from "@/services/types";
 import { Check } from "lucide-react";
+import { asArray } from "@/lib/utils";
 
 export default function OrderTracking() {
   const [orderNumber, setOrderNumber] = useState("");
@@ -27,8 +28,8 @@ export default function OrderTracking() {
     );
   };
 
-  const flow = result?.statusFlow || [];
-  const history = result?.statusHistory || [];
+  const flow = asArray<OrderTrackResponse["statusFlow"][number]>(result?.statusFlow);
+  const history = asArray<OrderTrackResponse["statusHistory"][number]>(result?.statusHistory);
   const currentCode = result?.currentStatus?.code;
   const doneIndex = flow.findIndex((s) => s.code === currentCode);
 
