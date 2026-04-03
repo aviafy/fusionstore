@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build
+build/
+dist/
+
+# Environment (secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# mongodb-memory-server (Jest) — downloaded mongod binary; >100MB, never commit
+backend/.mongo-binaries/
+
+# Vite
+*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional local tooling
+.turbo

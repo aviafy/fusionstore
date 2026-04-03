@@ -1,0 +1,223 @@
+const FreelancerService = require('../models/freelancerService');
+
+const freelancerServices = [
+  {
+    name: 'PCB Circuit Design & Layout',
+    description: 'Professional PCB design with KiCad or Altium. Includes schematic capture, multi-layer layout, DRC/ERC checks, and manufacturing-ready Gerber files. Ideal for prototyping and small-batch production.',
+    category: 'Electronics Design',
+    price: 299,
+    image: '/images/services/service-1.jpg',
+    deliveryTime: '7-10 days',
+    rating: 4.8,
+    numReviews: 45,
+    freelancerName: 'Marcus Chen',
+    freelancerImage: '/images/avatars/avatar-1.jpg',
+    skills: ['KiCad', 'Altium Designer', 'PCB Layout', 'Schematic Design'],
+  },
+  {
+    name: 'Microcontroller Programming',
+    description: 'Embedded systems programming for Arduino, ESP32, STM32, and PIC microcontrollers. Custom firmware development, sensor integration, communication protocols (I2C, SPI, UART), and RTOS implementation.',
+    category: 'Electronics Design',
+    price: 199,
+    image: '/images/services/service-2.jpg',
+    deliveryTime: '5-7 days',
+    rating: 4.9,
+    numReviews: 62,
+    freelancerName: 'Sofia Rodriguez',
+    freelancerImage: '/images/avatars/avatar-3.jpg',
+    skills: ['C/C++', 'Arduino', 'STM32', 'FreeRTOS'],
+  },
+  {
+    name: 'FPGA Development',
+    description: 'FPGA design and implementation using Verilog or VHDL for high-performance applications. Signal processing, custom IP cores, hardware acceleration, and SoC integration on Xilinx and Intel platforms.',
+    category: 'Electronics Design',
+    price: 499,
+    image: '/images/services/service-3.jpg',
+    deliveryTime: '10-14 days',
+    rating: 4.7,
+    numReviews: 28,
+    freelancerName: 'James Park',
+    freelancerImage: '/images/avatars/avatar-5.jpg',
+    skills: ['Verilog', 'VHDL', 'Xilinx Vivado', 'Intel Quartus'],
+  },
+  {
+    name: 'NFT Art Creation',
+    description: 'Custom digital art creation for NFT projects. High-resolution, unique designs with stunning visuals. Includes metadata generation, collection traits system, and IPFS-ready asset preparation.',
+    category: 'Valuable NFT',
+    price: 399,
+    image: '/images/services/service-4.jpg',
+    deliveryTime: '5-7 days',
+    rating: 4.9,
+    numReviews: 87,
+    freelancerName: 'Luna Nakamura',
+    freelancerImage: '/images/avatars/avatar-4.jpg',
+    skills: ['Digital Art', 'Photoshop', 'Procreate', 'Generative Art'],
+  },
+  {
+    name: 'Smart Contract Development',
+    description: 'Solidity smart contracts for NFT minting, ERC-721/1155 tokens, DeFi protocols, and marketplace functionality. Full audit-ready code with OpenZeppelin patterns and comprehensive test suites.',
+    category: 'Valuable NFT',
+    price: 599,
+    image: '/images/services/service-5.jpg',
+    deliveryTime: '7-10 days',
+    rating: 4.8,
+    numReviews: 54,
+    freelancerName: 'Alex Volkov',
+    freelancerImage: '/images/avatars/avatar-7.jpg',
+    skills: ['Solidity', 'Ethereum', 'Hardhat', 'OpenZeppelin'],
+  },
+  {
+    name: 'NFT Marketplace Setup',
+    description: 'Complete NFT marketplace deployment on Ethereum, Polygon, or Solana. Beautiful React-based UI, wallet integration, royalty enforcement, and off-chain indexing for lightning-fast queries.',
+    category: 'Valuable NFT',
+    price: 799,
+    image: '/images/services/service-6.jpg',
+    deliveryTime: '10-14 days',
+    rating: 4.7,
+    numReviews: 41,
+    freelancerName: 'Priya Sharma',
+    freelancerImage: '/images/avatars/avatar-8.jpg',
+    skills: ['Web3.js', 'React', 'Solidity', 'IPFS'],
+  },
+  {
+    name: 'IoT Device Design',
+    description: 'Complete IoT solution design including custom hardware, embedded firmware, cloud integration (AWS IoT / Azure), and mobile companion app. From concept to connected product.',
+    category: 'Modern Electronics Design',
+    price: 699,
+    image: '/images/services/service-7.jpg',
+    deliveryTime: '14-21 days',
+    rating: 4.8,
+    numReviews: 35,
+    freelancerName: 'David Kim',
+    freelancerImage: '/images/avatars/avatar-2.jpg',
+    skills: ['IoT', 'ESP32', 'AWS IoT', 'Python'],
+  },
+  {
+    name: 'Wireless Communication Systems',
+    description: 'RF design, antenna design, and wireless protocol implementation. Expertise in WiFi, BLE 5.3, LoRa/LoRaWAN, Zigbee, and custom wireless solutions with FCC/CE pre-compliance testing.',
+    category: 'Modern Electronics Design',
+    price: 549,
+    image: '/images/services/service-8.jpg',
+    deliveryTime: '10-14 days',
+    rating: 4.9,
+    numReviews: 52,
+    freelancerName: 'Elena Petrov',
+    freelancerImage: '/images/avatars/avatar-4.jpg',
+    skills: ['RF Design', 'Antenna Design', 'BLE 5.3', 'LoRaWAN'],
+  },
+  {
+    name: 'Power Electronics Design',
+    description: 'DC-DC converters, linear regulators, battery management systems, and solar charge controllers. Thermal analysis, efficiency optimization, and EMC-compliant designs for production.',
+    category: 'Modern Electronics Design',
+    price: 449,
+    image: '/images/services/service-9.jpg',
+    deliveryTime: '7-10 days',
+    rating: 4.7,
+    numReviews: 38,
+    freelancerName: 'Omar Hassan',
+    freelancerImage: '/images/avatars/avatar-6.jpg',
+    skills: ['Power Electronics', 'LTspice', 'Thermal Design', 'EMC'],
+  },
+  {
+    name: 'Manufacturing Process Optimization',
+    description: 'Optimize your production line for efficiency, cost reduction, and quality improvement. Lean manufacturing implementation, bottleneck analysis, and DFM/DFA reviews.',
+    category: 'Production Development',
+    price: 899,
+    image: '/images/services/service-10.jpg',
+    deliveryTime: '14-21 days',
+    rating: 4.8,
+    numReviews: 29,
+    freelancerName: 'Thomas Wright',
+    freelancerImage: '/images/avatars/avatar-1.jpg',
+    skills: ['Lean Manufacturing', 'Six Sigma', 'SolidWorks', 'Process Design'],
+  },
+  {
+    name: 'Quality Assurance & Testing',
+    description: 'Comprehensive QA testing, certification support, and compliance documentation for CE, FCC, UL, and IEC standards. Includes test plan development and environmental testing coordination.',
+    category: 'Production Development',
+    price: 599,
+    image: '/images/services/service-11.jpg',
+    deliveryTime: '10-14 days',
+    rating: 4.9,
+    numReviews: 67,
+    freelancerName: 'Sarah Mitchell',
+    freelancerImage: '/images/avatars/avatar-8.jpg',
+    skills: ['QA Testing', 'ISO 9001', 'CE/FCC Compliance', 'Documentation'],
+  },
+  {
+    name: 'Supply Chain Management',
+    description: 'End-to-end supply chain optimization and vendor management. Component sourcing, BOM cost reduction, logistics coordination, and inventory management systems setup.',
+    category: 'Production Development',
+    price: 749,
+    image: '/images/services/service-12.jpg',
+    deliveryTime: '7-10 days',
+    rating: 4.7,
+    numReviews: 44,
+    freelancerName: 'Robert Zhang',
+    freelancerImage: '/images/avatars/avatar-5.jpg',
+    skills: ['Supply Chain', 'Procurement', 'Vendor Management', 'ERP Systems'],
+  },
+  {
+    name: 'Technical Documentation',
+    description: 'Professional technical writing for user manuals, API documentation, datasheets, and specifications. Clear, structured documentation with diagrams, following industry standards like IEEE and ISO.',
+    category: 'General Services',
+    price: 199,
+    image: '/images/services/service-13.jpg',
+    deliveryTime: '5-7 days',
+    rating: 4.9,
+    numReviews: 112,
+    freelancerName: 'Emma Taylor',
+    freelancerImage: '/images/avatars/avatar-3.jpg',
+    skills: ['Technical Writing', 'Markdown', 'API Documentation', 'Diagrams'],
+  },
+  {
+    name: 'Project Management Consulting',
+    description: 'Agile/Scrum coaching, project planning, sprint management, and cross-functional team coordination. From startup MVPs to enterprise product launches, delivered on time and on budget.',
+    category: 'General Services',
+    price: 349,
+    image: '/images/services/service-14.jpg',
+    deliveryTime: '5-7 days',
+    rating: 4.8,
+    numReviews: 78,
+    freelancerName: 'Michael Brooks',
+    freelancerImage: '/images/avatars/avatar-7.jpg',
+    skills: ['Agile', 'Scrum', 'Jira', 'Risk Management'],
+  },
+  {
+    name: 'Business Strategy & Consulting',
+    description: 'Strategic planning, market analysis, competitive landscape mapping, and go-to-market strategy. Data-driven insights to help you scale from prototype to profitable product.',
+    category: 'General Services',
+    price: 499,
+    image: '/images/services/service-15.jpg',
+    deliveryTime: '7-10 days',
+    rating: 4.7,
+    numReviews: 56,
+    freelancerName: 'Nina Patel',
+    freelancerImage: '/images/avatars/avatar-6.jpg',
+    skills: ['Strategy', 'Market Analysis', 'Business Development', 'Financial Modeling'],
+  },
+];
+
+const seedFreelancerServices = async ({ force = false, skipIfExists = true } = {}) => {
+  try {
+    const existingCount = await FreelancerService.countDocuments();
+
+    if (existingCount > 0 && skipIfExists && !force) {
+      return { skipped: true, message: 'Freelancer services already exist' };
+    }
+
+    if (force) {
+      await FreelancerService.deleteMany({});
+    }
+
+    await FreelancerService.insertMany(freelancerServices);
+    return { seeded: true, count: freelancerServices.length };
+  } catch (err) {
+    console.error('Error seeding freelancer services:', err);
+    throw err;
+  }
+};
+
+module.exports = seedFreelancerServices;
+module.exports.freelancerServices = freelancerServices;
+module.exports.seedFreelancerServices = seedFreelancerServices;
